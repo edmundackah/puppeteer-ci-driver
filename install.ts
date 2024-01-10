@@ -7,10 +7,8 @@ const sourceZip = () : string => {
 
     console.log(`detected OS: ${host}    Arch: ${process.arch}`);
 
-    if (host === 'linux') {
+    if (host === 'linux' && process.arch === "x64") {
         return `chrome/chrome-${host}64.zip`;
-    } else if (host === "win32" && process.arch === "x64") {
-        return "chrome/chrome-win64.zip";
     } else throw Error(`Host OS: ${host}    Arch: ${process.arch} is not supported`);
 }
 
