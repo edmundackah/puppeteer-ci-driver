@@ -1,7 +1,7 @@
 const splitFile = require('split-file');
 import * as fs from "fs";
 
-// 10000000   10MB in bytes
+// 10000000  -  10MB in bytes
 const maxSize = 10000000;
 
 export const split = async (file: string, dest: string) : Promise<string[]> => {

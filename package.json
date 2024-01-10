@@ -2,10 +2,14 @@
   "name": "puppeteer-ci-driver",
   "version": "1.0.0",
   "description": "Puppeteer chrome drivers for restricted CI environments",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edmundackah/puppeteer-ci-driver"
+  },
   "main": "install.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cross-env PUPPETEER_DRIVER_PATH='C:/Users/Quest/Documents/GitHub/puppeteer-ci-driver/drivers/' npx ts-node install.ts"
+    "postinstall": "cross-env CI_DRIVER_SKIP_SETUP='false' npx ts-node install.ts"
   },
   "keywords": [
     "devops",

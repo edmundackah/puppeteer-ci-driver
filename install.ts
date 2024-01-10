@@ -1,7 +1,6 @@
 import extract from 'extract-zip';
 import { merge } from './util';
-
-const target = "C:/Users/Quest/Documents/GitHub/puppeteer-ci-driver/drivers";
+import * as fs from "fs";
 
 const sourceZip = () : string => {
     const host:NodeJS.Platform = process.platform;
@@ -16,21 +15,28 @@ const sourceZip = () : string => {
 }
 
 const targetPath = () : string => {
-    console.log(process.env.PUPPETEER_DRIVER_PATH);
+    let path = `${__dirname}/drivers/`;
 
-    if (process.env.PUPPETEER_DRIVER_PATH == undefined) {
-        throw Error("set desired driver path using `PUPPETEER_DRIVER_PATH` env variable");
-    } else return process.env.PUPPETEER_DRIVER_PATH;
+    if (process.env.PUPPETEER_DRIVER_PATH !== undefined) {
+        console.log("setting desired driver path using `PUPPETEER_DRIVER_PATH` env variable");
+        path = process.env.PUPPETEER_DRIVER_PATH;
+    };
+
+    console.log(`installing drivers to: ${path}`);
+    return path;
 }
 
 export const extractDriver = async () => {
-    console.log("merging fragments together");
+    if (process.env.CI_DRIVER_SKIP_SETUP === "false") {
+        console.log("merging fragments together");
+        let zipFile = `${__dirname}/${sourceZip()}`
+        await merge(zipFile);
 
-    await merge(`${__dirname}/${sourceZip()}`);
-
-    if (process.env.CI_DRIVER_SKIP_SETUP !== "false" || process.env.CI_DRIVER_SKIP_SETUP === undefined) {
         try {
             await extract(sourceZip(), {dir: targetPath()});
+
+            console.log("cleaning up...");
+            fs.unlinkSync(zipFile);
             console.log('Extraction complete');
         } catch (err) {
             console.log(err);
