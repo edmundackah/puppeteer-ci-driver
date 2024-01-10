@@ -1,0 +1,26 @@
+{
+  "name": "puppeteer-ci-driver",
+  "version": "1.0.0",
+  "description": "Puppeteer chrome drivers for restricted CI environments",
+  "main": "install.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cross-env PUPPETEER_DRIVER_PATH='C:/Users/Quest/Documents/GitHub/puppeteer-ci-driver/drivers/' npx ts-node install.ts"
+  },
+  "keywords": [
+    "devops",
+    "gitlab-ci",
+    "puppeteer"
+  ],
+  "author": "Edmund A",
+  "license": "ISC",
+  "dependencies": {
+    "extract-zip": "^2.0.1",
+    "split-file": "^2.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
