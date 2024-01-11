@@ -12,7 +12,9 @@ const sourceZip = async () : Promise<string> => {
 
 const targetPath = () : string => {
     if (process.env.PUPPETEER_DRIVER_PATH === undefined) {
-        throw Error("set desired driver path using `PUPPETEER_DRIVER_PATH` env variable");
+        const path = `${__dirname.split("node_modules")[0]}driver`;
+        console.log(`installing drivers to: ${path}`);
+        return path;
     }
 
     console.log(`installing drivers to: ${process.env.PUPPETEER_DRIVER_PATH}`);
