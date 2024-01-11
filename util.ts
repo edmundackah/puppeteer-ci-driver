@@ -14,16 +14,14 @@ export const split = async (file: string, dest: string) : Promise<string[]> => {
 
 export const merge = async (dest: string) : Promise<void> => {
     const names: string[] = [];
+
+    const fragmentSource = `node_modules/puppeteer-ci-driver/chrome/linux64`;
     
-    fs.readdirSync(fragmentSource()).forEach(file => {
-        names.push(`${fragmentSource()}${file}`);
+    fs.readdirSync(fragmentSource).forEach(file => {
+        names.push(`${fragmentSource}/${file}`);
     });
     console.log(`dest: ${dest}`);
     console.log(`fragments: ${names}`);
 
     await splitFile.mergeFiles(names, dest);
-}
-
-export const fragmentSource = () : string => {
-    return `chrome/linux64/`;
 }

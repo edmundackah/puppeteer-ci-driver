@@ -11,26 +11,25 @@ const sourceZip = async () : Promise<string> => {
 }
 
 const targetPath = () : string => {
-    let path = `${__dirname}/drivers/`;
-
     if (process.env.PUPPETEER_DRIVER_PATH === undefined) {
-        console.log("setting desired driver path using `PUPPETEER_DRIVER_PATH` env variable");
-        path = process.env.PUPPETEER_DRIVER_PATH;
-    };
+        throw Error("set desired driver path using `PUPPETEER_DRIVER_PATH` env variable");
+    }
 
-    console.log(`installing drivers to: ${path}`);
-    return path;
+    console.log(`installing drivers to: ${process.env.PUPPETEER_DRIVER_PATH}`);
+    return process.env.PUPPETEER_DRIVER_PATH;
 }
 
 export const extractDriver = async () => {
     try {
         const source = await sourceZip();
-
-        console.log("merging fragments together");
         let zipFile = `${__dirname}/${source}`
+
+        console.log(`merging fragments together at: ${zipFile}`);
         await merge(zipFile);
 
-        await extract(source, {dir: targetPath()});
+        console.log(`source: ${source}`);
+
+        await extract(zipFile, {dir: targetPath()});
 
         console.log("cleaning up...");
         fs.unlinkSync(zipFile);
