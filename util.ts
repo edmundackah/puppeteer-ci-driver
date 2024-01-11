@@ -25,9 +25,5 @@ export const merge = async (dest: string) : Promise<void> => {
 }
 
 export const fragmentSource = () : string => {
-    const host:NodeJS.Platform = process.platform;
-
-    if (host === 'linux' && process.arch === "x64") {
-        return `chrome/${host}64/`;
-    } else throw Error(`Host OS: ${host}    Arch: ${process.arch} is not supported`);
+    return `chrome/linux64/`;
 }

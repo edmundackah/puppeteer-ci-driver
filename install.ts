@@ -2,20 +2,18 @@ import extract from 'extract-zip';
 import { merge } from './util';
 import * as fs from "fs";
 
-const sourceZip = () : string => {
+const sourceZip = async () : Promise<string> => {
     const host:NodeJS.Platform = process.platform;
 
     console.log(`detected OS: ${host}    Arch: ${process.arch}`);
 
-    if (host === 'linux' && process.arch === "x64") {
-        return `chrome/chrome-${host}64.zip`;
-    } else throw Error(`Host OS: ${host}    Arch: ${process.arch} is not supported`);
+    return `chrome/linux64.zip`;
 }
 
 const targetPath = () : string => {
     let path = `${__dirname}/drivers/`;
 
-    if (process.env.PUPPETEER_DRIVER_PATH !== undefined) {
+    if (process.env.PUPPETEER_DRIVER_PATH === undefined) {
         console.log("setting desired driver path using `PUPPETEER_DRIVER_PATH` env variable");
         path = process.env.PUPPETEER_DRIVER_PATH;
     };
@@ -25,21 +23,21 @@ const targetPath = () : string => {
 }
 
 export const extractDriver = async () => {
-    if (process.env.CI_DRIVER_SKIP_SETUP === "false") {
+    try {
+        const source = await sourceZip();
+
         console.log("merging fragments together");
-        let zipFile = `${__dirname}/${sourceZip()}`
+        let zipFile = `${__dirname}/${source}`
         await merge(zipFile);
 
-        try {
-            await extract(sourceZip(), {dir: targetPath()});
+        await extract(source, {dir: targetPath()});
 
-            console.log("cleaning up...");
-            fs.unlinkSync(zipFile);
-            console.log('Extraction complete');
-        } catch (err) {
-            console.log(err);
-        }
-    } else console.log(`Skipping driver extraction. 'CI_DRIVER_SKIP_SETUP' is set to ${process.env.CI_DRIVER_SKIP_SETUP}`);
+        console.log("cleaning up...");
+        fs.unlinkSync(zipFile);
+        console.log('Extraction complete');
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 console.log("running post install script....");

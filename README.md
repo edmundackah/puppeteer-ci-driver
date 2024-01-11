@@ -10,6 +10,3 @@ npm install puppeteer-ci-driver
 ```
 
 The default installation location is `/driver` folder at your project root. You can set your own path using `PUPPETEER_DRIVER_PATH` environment variable.
-
-## Skipping the postinstall script
-Set `CI_DRIVER_SKIP_SETUP` environment variable to `true`, to prevent the driver installation.
